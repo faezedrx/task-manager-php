@@ -1,6 +1,7 @@
 # 📋 Task Manager with Email Reminders
 
 Welcome to the Task Manager project! This application allows users to manage their tasks and receive email reminders for tasks scheduled for the day. It's built using PHP, MySQL, and PHPMailer.
+# [use online](https://bamboo-services.ir/)
 
 ## 🚀 Features
 
@@ -13,8 +14,8 @@ Welcome to the Task Manager project! This application allows users to manage the
 
 1. **Clone the repository**:
     ```bash
-    git clone https://github.com/faezedrx/task-manager.git
-    cd task-manager
+    git clone https://github.com/faezedrx/task-manager-php.git
+    cd task-manager-php
     ```
 
 2. **Install Dependencies**:

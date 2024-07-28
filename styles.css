@@ -1,0 +1,174 @@
+/* General Styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Caveat', cursive, 'Lobster', cursive;
+}
+
+/* Background Animation */
+#background {
+    background: #e0f7fa;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Bamboo Animation */
+.bamboo {
+    width: 50px;
+    height: 100%;
+    background: linear-gradient(180deg, #a8e063, #56ab2f);
+    position: relative;
+    border-radius: 10px;
+    margin: 0 5px;
+    animation: sway 10s infinite ease-in-out;
+}
+
+.bamboo::before, .bamboo::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 10px;
+    background: white;
+    left: 0;
+    transform: translateY(-50%);
+    border-radius: 5px;
+}
+
+.bamboo::before {
+    top: 25%;
+}
+
+.bamboo::after {
+    top: 75%;
+}
+
+@keyframes sway {
+    0% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-20px) rotate(5deg);
+    }
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+}
+
+.bamboo:nth-child(odd) {
+    animation-duration: 15s;
+}
+
+.bamboo:nth-child(even) {
+    animation-duration: 10s;
+}
+
+/* Container for Buttons and Forms */
+.container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
+}
+
+/* Button Styles */
+.button-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.button {
+    margin: 0 20px;
+    display: inline-block;
+    padding: 12px 36px;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 8px;
+    color: #fff;
+    background: linear-gradient(45deg, #34d399, #10b981);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+.button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.5s ease;
+}
+
+.button:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.button:hover {
+    background: linear-gradient(45deg, #10b981, #34d399);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.button:active {
+    background: linear-gradient(45deg, #059669, #0d9488);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(0.98);
+}
+
+/* Form Styles */
+.form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    inset: 0;
+    /* background-color: rgba(0, 0, 0, 0.5); Semi-transparent background */
+    padding: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+.form-content {
+    background-color: #fff; /* White background for forms */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 100%;
+    max-width: 400px; /* Max width of the form */
+}
+
+.form-input {
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}

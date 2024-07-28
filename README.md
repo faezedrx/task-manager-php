@@ -92,3 +92,5 @@ Contributions are welcome! Please create a pull request or open an issue to disc
 - [Tailwind CSS](https://tailwindcss.com/) for styling the application.
 - [SweetAlert2](https://sweetalert2.github.io/) for beautiful alerts.
 
+## 📧 Contact
+If you have any questions or need further assistance, feel free to contact me at faezeh.darbeheshti@gmail.com.

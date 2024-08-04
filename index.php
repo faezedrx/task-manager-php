@@ -43,6 +43,7 @@
             <div id="login-form" class="form hidden">
                 <div class="form-content">
                     <form action="login.php" method="POST">
+                        <input type="hidden" name="form_type" value="login">
                         <h2 class="text-3xl font-bold mb-4">Login</h2>
                         <input type="email" name="username" placeholder="Email" class="form-input mb-4" required>
                         <input type="password" name="password" placeholder="Password" class="form-input mb-4" required>
@@ -76,7 +77,8 @@
 
             <div id="forgot-password-form" class="form hidden">
                 <div class="form-content">
-                    <form action="forgot_password.php" method="POST">
+                    <form action="login.php" method="POST">
+                        <input type="hidden" name="form_type" value="forgot_password">
                         <h2 class="text-3xl font-bold mb-4">Forgot Password</h2>
                         <input type="email" name="email" placeholder="Email" class="form-input mb-4" required>
                         <button type="submit" class="button bg-yellow-500 hover:bg-yellow-600">Submit</button>
@@ -134,12 +136,21 @@
         document.querySelector('#login-form form').addEventListener('submit', function (e) {
             e.preventDefault();
             const formData = new FormData(this);
+            formData.append('form_type', 'login');
 
             fetch('login.php', {
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.json())
+            .then(response => response.text())
+            .then(text => {
+                console.log('Raw response:', text);  // Log raw response for debugging
+                try {
+                    return JSON.parse(text);
+                } catch (error) {
+                    throw new Error('Invalid JSON response: ' + text);
+                }
+            })
             .then(data => {
                 if (data.status === 'success') {
                     Swal.fire('Success', data.message, 'success');
@@ -149,21 +160,41 @@
                 }
             })
             .catch(error => {
-                Swal.fire('Error', 'An error occurred!', 'error');
+                Swal.fire('Error', 'An error occurred: ' + error.message, 'error');
             });
         });
-    </script>
-        <?php if (isset($_GET['verified']) && $_GET['verified'] == 1): ?>
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Email Verified',
-                text: 'Your email has been successfully verified.',
-                confirmButtonText: 'OK'
+
+        // ارسال فرم فراموشی رمز عبور
+        document.querySelector('#forgot-password-form form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            formData.append('form_type', 'forgot_password');
+
+            fetch('login.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(text => {
+                console.log('Raw response:', text);  // Log raw response for debugging
+                try {
+                    return JSON.parse(text);
+                } catch (error) {
+                    throw new Error('Invalid JSON response: ' + text);
+                }
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire('Success', data.message, 'success');
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            })
+            .catch(error => {
+                Swal.fire('Error', 'An error occurred: ' + error.message, 'error');
             });
-        </script>
-    <?php endif; ?>
-    <script>
+        });
+
         // Show/hide forms
         document.getElementById('login-btn').addEventListener('click', function() {
             document.getElementById('login-form').classList.remove('hidden');
@@ -174,6 +205,7 @@
         });
 
         document.getElementById('forgot-password-btn').addEventListener('click', function() {
+            document.getElementById('login-form').classList.add('hidden');
             document.getElementById('forgot-password-form').classList.remove('hidden');
         });
 
@@ -187,29 +219,6 @@
 
         document.getElementById('close-forgot-password').addEventListener('click', function() {
             document.getElementById('forgot-password-form').classList.add('hidden');
-        });
-
-        // Handle form submission for forgot password
-        document.querySelector('#forgot-password-form form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-
-            fetch('forgot_password.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    Swal.fire('Success', data.message, 'success');
-                    document.getElementById('forgot-password-form').classList.add('hidden');
-                } else {
-                    Swal.fire('Error', data.message, 'error');
-                }
-            })
-            .catch(error => {
-                Swal.fire('Error', 'An error occurred: ' + error.message, 'error');
-            });
         });
 
     </script>

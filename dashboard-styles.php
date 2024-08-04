@@ -126,7 +126,7 @@
         margin-left: 200px;
     }
     .menu-button {
-        position: absolute;
+        position: fixed;
         top: 10px;
         left: 10px;
         z-index: 1000;

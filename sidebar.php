@@ -6,7 +6,7 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 ?>
-<div id="sidebar" class="sidebar">
+<div id="sidebar" class="sidebar open">
     <div class="sidebar-item bamboo">
         <div class="sidebar-content">
             <a href="home.php">Home</a>

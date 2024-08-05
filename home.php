@@ -1,4 +1,5 @@
 <?php
+require 'config.php';
 require 'dashboard-styles.php';
 require 'sidebar.php';
 session_start();
@@ -8,18 +9,16 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-// متغیرهای خطا و موفقیت
 $error_message = '';
 $success_message = '';
 
-// دریافت Telegram ID از URL در صورت وجود
 if (isset($_GET['telegram_id'])) {
     $telegram_id = $_GET['telegram_id'];
     if (!empty($telegram_id) && isset($_SESSION['username'])) {
-        require 'config.php';
+        $db = Database::getInstance();
+        $mysqli = $db->getConnection();
         $username = $_SESSION['username'];
 
-        // به‌روزرسانی Telegram ID
         $stmt = $mysqli->prepare("UPDATE users SET telegram_id = ? WHERE username = ?");
         $stmt->bind_param('ss', $telegram_id, $username);
         if ($stmt->execute()) {
@@ -28,18 +27,16 @@ if (isset($_GET['telegram_id'])) {
             $error_message = "Error updating Telegram ID.";
         }
         $stmt->close();
-        $mysqli->close();
     }
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // بررسی وجود username در جلسه
     if (!isset($_SESSION['username'])) {
         $error_message = "User not logged in.";
     } else {
-        require 'config.php';
+        $db = Database::getInstance();
+        $mysqli = $db->getConnection();
 
-        // گرفتن اطلاعات فرم
         $username = $_SESSION['username'];
         $stmt = $mysqli->prepare("SELECT password, nickname FROM users WHERE username = ?");
         $stmt->bind_param('s', $username);
@@ -49,13 +46,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->close();
 
         if (isset($_POST['update_nickname'])) {
-            // به‌روزرسانی نام مستعار جدید
             $new_nickname = $_POST['new_nickname'];
             if (!empty($new_nickname)) {
                 $stmt = $mysqli->prepare("UPDATE users SET nickname = ? WHERE username = ?");
                 $stmt->bind_param('ss', $new_nickname, $username);
                 if ($stmt->execute()) {
-                    $_SESSION['nickname'] = $new_nickname; // بروزرسانی نام مستعار در جلسه
+                    $_SESSION['nickname'] = $new_nickname;
                     $success_message = "Nickname updated successfully.";
                 } else {
                     $error_message = "Error updating nickname.";
@@ -68,7 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $current_password = $_POST['current_password'];
             $new_password = $_POST['new_password'];
             if (!empty($current_password) && password_verify($current_password, $hashed_password)) {
-                // به‌روزرسانی رمز عبور جدید
                 $new_hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
                 $stmt = $mysqli->prepare("UPDATE users SET password = ? WHERE username = ?");
                 $stmt->bind_param('ss', $new_hashed_password, $username);
@@ -84,7 +79,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         if (isset($_POST['update_telegram_id'])) {
-            // به‌روزرسانی Telegram ID
             $telegram_id = $_POST['telegram_id'];
             if (!empty($telegram_id)) {
                 $stmt = $mysqli->prepare("UPDATE users SET telegram_id = ? WHERE username = ?");
@@ -97,12 +91,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $stmt->close();
             }
         }
-
-        $mysqli->close();
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -150,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <form action="home.php" method="post" class="bg-white p-8 rounded-xl shadow-2xl space-y-6">
             <h2 class="text-3xl font-semibold text-gray-800 mb-4">Update Your Nickname</h2>
             <div>
-            </br></br>
+                </br></br>
                 <label for="new_nickname" class="block text-gray-700 text-sm font-medium mb-2">New Nickname</label>
                 <input type="text" id="new_nickname" name="new_nickname" class="w-full border border-gray-300 rounded-lg p-4 text-gray-900 focus:outline-none focus:ring-4 focus:ring-indigo-500 transition duration-200 ease-in-out" placeholder="Enter new nickname">
                 </br></br>
@@ -197,16 +188,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 </div>
-
-<!-- <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const menuButton = document.getElementById('menu-button');
-        const sidebar = document.getElementById('sidebar');
-
-        menuButton.addEventListener('click', () => {
-            sidebar.classList.toggle('open');
-        });
-    });
-</script> -->
 </body>
 </html>

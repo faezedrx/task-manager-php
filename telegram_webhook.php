@@ -1,6 +1,10 @@
 <?php
-// فایل کانفیگ که اتصال به دیتابیس را برقرار می‌کند
+
 require 'config.php';
+
+// دریافت اتصال به پایگاه داده
+$db = Database::getInstance();
+$mysqli = $db->getConnection();
 
 // خواندن داده‌های دریافتی از تلگرام
 $update = json_decode(file_get_contents("php://input"), true);
@@ -22,8 +26,10 @@ if ($update) {
             'chat_id' => $telegram_id,
             'text' => "Welcome! Your Telegram ID has been saved."
         ];
-        file_get_contents("https://api.telegram.org/bot" . "7432963901:AAGnG0HIXRCDGLQBhGb5Ca0lhSz59VfnIwA" . "/sendMessage?" . http_build_query($response));
+        file_get_contents("https://api.telegram.org/bot" . "YOUR_BOT_API_KEY" . "/sendMessage?" . http_build_query($response));
     }
 }
+
+// بستن اتصال به پایگاه داده
 $mysqli->close();
 ?>

@@ -22,6 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $form_type = $_POST['form_type'];
         file_put_contents($log_file, "Form type: $form_type\n", FILE_APPEND);
 
+        $db = Database::getInstance();
+        $mysqli = $db->getConnection();
+
         if ($form_type == 'login') {
             // کد ورود به سیستم
             $username = trim($_POST['username']);
@@ -119,8 +122,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     }
                 }
             }
-            // $stmt->close();
-
         } else {
             $response['status'] = 'error';
             $response['message'] = 'Invalid form type!';

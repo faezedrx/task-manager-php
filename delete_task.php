@@ -1,5 +1,11 @@
 <?php
+require 'config.php';
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_task'])) {
+    // گرفتن اتصال به پایگاه داده از کلاس Singleton
+    $db = Database::getInstance();
+    $mysqli = $db->getConnection();
+
     $task_id = $_POST['task_id'];
     
     $sql = "DELETE FROM tasks WHERE id=?";

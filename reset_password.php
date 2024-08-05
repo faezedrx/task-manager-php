@@ -1,6 +1,5 @@
 <?php
-require 'config.php';  // فایل تنظیمات و اتصال به پایگاه داده را وارد کنید
-
+require 'config.php';  
 // چک کردن اینکه آیا توکن در URL موجود است
 if (!isset($_GET['token']) || empty($_GET['token'])) {
     echo json_encode(['status' => 'error', 'message' => 'Invalid request!']);
@@ -8,6 +7,10 @@ if (!isset($_GET['token']) || empty($_GET['token'])) {
 }
 
 $token = trim($_GET['token']);
+
+// دریافت اتصال به پایگاه داده
+$db = Database::getInstance();
+$mysqli = $db->getConnection();
 
 // چک کردن وجود توکن در پایگاه داده
 $stmt = $mysqli->prepare("SELECT id FROM users WHERE token = ? AND token_created_at > NOW() - INTERVAL 1 HOUR");
@@ -32,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo json_encode(['status' => 'error', 'message' => 'Password is required!']);
     } else {
         // هش کردن رمز عبور جدید
-        $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);
+        $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
         // به‌روزرسانی رمز عبور و پاک کردن توکن
         $stmt = $mysqli->prepare("UPDATE users SET password = ?, token = NULL, token_created_at = NULL WHERE token = ?");

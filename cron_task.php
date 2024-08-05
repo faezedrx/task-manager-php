@@ -3,7 +3,11 @@ require 'config.php';
 require 'email.php';
 require 'botinfo.php';
 
-// Get current date
+// گرفتن اتصال به پایگاه داده از کلاس Singleton
+$db = Database::getInstance();
+$mysqli = $db->getConnection();
+
+// گرفتن تاریخ فعلی
 $current_date = date('Y-m-d');
 
 // Query to get all users
@@ -12,7 +16,7 @@ $stmt = $mysqli->prepare($sql);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Load email template
+// بارگذاری قالب ایمیل
 $template = file_get_contents('email_template.html');
 
 // Loop through each user

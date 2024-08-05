@@ -6,8 +6,8 @@ if (!class_exists('Database')) {
 
         private $host = 'localhost';
         private $db = 'bamboos1_services_portf';
-        private $user = 'bamboos1_faezeh';
-        private $pass = 'Fa+Ba!M1402';
+        private $user = '';
+        private $pass = '';
 
         private function __construct() {
             $this->mysqli = new mysqli($this->host, $this->user, $this->pass, $this->db);

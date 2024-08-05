@@ -22,8 +22,8 @@ class Mail {
         $this->mail->isSMTP();
         $this->mail->Host = 'bamboo-services.ir';
         $this->mail->SMTPAuth = true;
-        $this->mail->Username = 'tasks@bamboo-services.ir'; 
-        $this->mail->Password = 'Ta@B140205'; 
+        $this->mail->Username = ''; 
+        $this->mail->Password = ''; 
         $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $this->mail->Port = 587;
     }
@@ -45,7 +45,7 @@ function sendEmail($to, $subject, $body) {
 
     try {
         // تنظیمات گیرنده
-        $mailInstance->setFrom('tasks@bamboo-services.ir', 'Task Management');
+        $mailInstance->setFrom('', 'Task Management');
         $mailInstance->addAddress($to);
 
         // تنظیمات محتوا

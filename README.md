@@ -50,37 +50,70 @@ Welcome to the Task Manager project! This application allows users to manage the
 The email reminders are handled by PHPMailer. Ensure that your SMTP settings in `email.php` are correctly configured:
 
 ```php
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
+<?php
 require 'PHPMailer/src/Exception.php';
 require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
 
-$mail = new PHPMailer(true);
-$mail->isSMTP();
-$mail->Host = 'your-smtp-server';
-$mail->SMTPAuth = true;
-$mail->Username = 'your-email@example.com';
-$mail->Password = 'your-email-password';
-$mail->SMTPSecure = 'tls';
-$mail->Port = 587;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-function sendEmail($recipient, $subject, $body) {
-    global $mail;
+// require 'vendor/autoload.php';
+
+class Mail {
+    private static $instance = null;
+    private $mail;
+
+    private function __construct() {
+        $this->mail = new PHPMailer(true);
+        $this->configureSMTP();
+    }
+
+    private function configureSMTP() {
+        // تنظیمات سرور SMTP
+        $this->mail->isSMTP();
+        $this->mail->Host = 'your-smtp-server';
+        $this->mail->SMTPAuth = true;
+        $this->mail->Username = 'your-email@example.com'; 
+        $this->mail->Password = 'your-email-password'; 
+        $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $this->mail->Port = 587;
+    }
+
+    public static function getInstance() {
+        if (self::$instance == null) {
+            self::$instance = new Mail();
+        }
+        return self::$instance;
+    }
+
+    public function getMailer() {
+        return $this->mail;
+    }
+}
+
+function sendEmail($to, $subject, $body) {
+    $mailInstance = Mail::getInstance()->getMailer();
+
     try {
-        $mail->setFrom('your-email@example.com', 'Task Manager');
-        $mail->addAddress($recipient);
-        $mail->isHTML(true);
-        $mail->Subject = $subject;
-        $mail->Body    = $body;
-        $mail->send();
+        // تنظیمات گیرنده
+        $mailInstance->setFrom('your-email@example.com', 'Task Management');
+        $mailInstance->addAddress($to);
+
+        // تنظیمات محتوا
+        $mailInstance->isHTML(true);
+        $mailInstance->Subject = $subject;
+        $mailInstance->Body = $body;
+
+        // ارسال ایمیل
+        $mailInstance->send();
         return true;
     } catch (Exception $e) {
-        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        error_log("Email could not be sent. Mailer Error: {$mailInstance->ErrorInfo}");
         return false;
     }
 }
+?>
 ```
 ## 🤝 Contributing
 

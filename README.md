@@ -29,7 +29,7 @@ Welcome to the Task Manager project! This application allows users to manage the
     - Update the `config.php` file with your database credentials.
 
 4. **Configure Email Settings**:
-    - Update the `email.php` and `register.php` files with your SMTP server details.
+    - Update the `email.php` file with your SMTP server details.
 
 ## 🏃 Usage
 
